@@ -1,5 +1,7 @@
 # YAML SEEDER
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/a6068ea69ed31f0e6827/maintainability)](https://codeclimate.com/github/AMBERSIVE/yamlseeder/maintainability)
+
 !!! This package is not ready yet !!!
 
 ## Installation
