@@ -16,6 +16,44 @@ php artisan vendor:publish --tag=yaml-seeder
 
 ## Usage
 
+All the seeds will be executed if you run the classic
+
+```bash
+php artisan db:seed
+```
+
+## Create yaml seed file
+
+Create a yml file in *database/seeds-yaml*.
+Please use the *.yml* file extension.
+
+The structure of the the seed looks like:
+
+```yml
+model: \AMBERSIVE\YamlSeeder\Tests\Examples\Models\Migration
+primaryKey: id
+fieldsOnCreate:
+  - migration
+  - batch
+data:
+  - id: 99
+    batch: 1
+    migration: 'users_test_table'
+```
+
+**model**:
+The model will define which data should be seeded.
+
+**primaryKey**:
+Default it is 'id' if not defined .
+
+**fieldsOnCreate**:
+List of field name which defines which files will be need on a create statement. Make your fields nullable if you want to reduce the list.
+
+**data**:
+Array of the actual data.
+Follow the structure of you model.
+
 ## Feedback
 
 Please feel free to give us feedback or any improvement suggestions.

@@ -6,7 +6,10 @@ fieldsOnCreate:
 data:
   - id: 99
     batch: 1
-    migration: 'users_test_table'
+    migration_raw: 
+      field: migration
+      convertTo: password
+      value: 'hallo'
   - id: 101
     batch: 1
     migration: 'users_test_table'

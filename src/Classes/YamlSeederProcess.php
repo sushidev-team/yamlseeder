@@ -5,13 +5,18 @@ namespace AMBERSIVE\YamlSeeder\Classes;
 use File;
 use Yaml;
 use DB;
+use Str;
+
+use AMBERSIVE\YamlSeeder\Classes\YamlSeederFieldType;
 
 class YamlSeederProcess {
 
     public String $path;
-    public bool   $successful = false;
-    public array  $yamlData = [];
-    public array  $fillable = [];
+    public bool   $successful   = false;
+    public bool   $saveOnFinish =  false;
+    public array  $yamlData     = [];
+    public array  $yamlOrginal  = [];
+    public array  $fillable     = [];
 
     public $intance;
 
@@ -30,7 +35,8 @@ class YamlSeederProcess {
             return false;
         }
 
-        $this->yamlData = Yaml::parseFile($this->path);
+        $this->yamlData    = Yaml::parseFile($this->path);
+        $this->yamlOrginal = Yaml::parseFile($this->path);
         
         $modelInstance  = $this->extractModelInstance();
         $this->fillable = $modelInstance->getFillable();
@@ -70,8 +76,8 @@ class YamlSeederProcess {
 
         $result = DB::transaction(function() use ($lines){
 
-            $lines->each(function($line){
-                $successful = $this->saveItem($line);
+            $lines->each(function($line, $index){
+                $successful = $this->saveItem($line, $index);
                 if ($successful == false) {
                     throw \Exeception("Seed failed!");
                 }
@@ -80,6 +86,11 @@ class YamlSeederProcess {
             return true;
 
         });
+
+        if ($this->saveOnFinish){
+            $yamlContent = Yaml::dump($this->yamlData);
+            $file        = File::put($this->path, $yamlContent);
+        }
 
         return $result;
 
@@ -91,8 +102,8 @@ class YamlSeederProcess {
      * @param  mixed $item
      * @return bool
      */
-    private function saveItem(array $item):bool {
-        $item = $this->sanitizeItem($item);
+    private function saveItem(array $item, int $index):bool {
+        $itemSanitized = $this->sanitizeItem($item);
         $primaryKey = data_get($this->yamlData, 'primary', 'id');
 
         $model = data_get($this->yamlData, 'model', null);
@@ -101,8 +112,11 @@ class YamlSeederProcess {
             return false;
         }
 
-        $entry = $model::firstOrCreate($this->createItemData($item));
-        $entry->update($item);
+        $entry         = $model::firstOrCreate($this->createItemData($itemSanitized));
+        $itemSanitized = $this->createItemData($itemSanitized);
+        $entry->update($itemSanitized);
+
+        $this->yamlData['data'][$index] = $itemSanitized;
 
         return true;
 
@@ -132,7 +146,28 @@ class YamlSeederProcess {
             $returnData[$primaryKey] = $item[$primaryKey];
         }
 
-        return $returnData;
+        return $this->convertData($returnData);
+
+    }
+    
+    /**
+     * Convert data if it is a YamlSeederFieldType
+     *
+     * @param  mixed $item
+     * @return array
+     */
+    private function convertData(array $item): array {
+
+        foreach ($item as $key => $value) {
+            if (is_array($value)) {
+                $type  = new YamlSeederFieldType($value);
+                $field = $type->field !== "" ? $type->field : $key;
+                $item[$field] = $type->transform();
+                $this->saveOnFinish = true;
+            }
+        }
+
+        return $item;
 
     }
     
@@ -144,11 +179,11 @@ class YamlSeederProcess {
      */
     private function sanitizeItem(array $item):array {
         foreach($item as $key => $value){
-            if (in_array($key, $this->fillable) === false) {
+            if (Str::endsWith($key, '_raw') === false && in_array($key, $this->fillable) === false) {
                 unset($item[$key]);
             }
         }
-        return $item;
+        return $this->convertData($item);
     }
 
 }

@@ -4,6 +4,7 @@ namespace AMBERSIVE\YamlSeeder\Tests\Unit\Classes;
 
 
 use Config;
+use File;
 use Tests\TestCase;
 
 use AMBERSIVE\YamlSeeder\Classes\YamlSeeder;
@@ -30,6 +31,18 @@ class YamlSeederTest extends TestCase
             $item->delete();
         });
 
+        File::copy(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'), base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.ori'));
+
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Reset the demo file
+        File::delete(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'));
+        File::move(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.ori'), base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'));
+
     }
     
     /**
@@ -39,9 +52,11 @@ class YamlSeederTest extends TestCase
 
         $result = YamlSeeder::seed();
 
-        $count = \AMBERSIVE\YamlSeeder\Tests\Examples\Models\Migration::count();
+        $entries = \AMBERSIVE\YamlSeeder\Tests\Examples\Models\Migration::get();
+        $element = $entries->first();
 
-        $this->assertEquals(2, $count);
+        $this->assertEquals(2, $entries->count());
+        $this->assertEquals(99, $element->id);
 
     }
 
