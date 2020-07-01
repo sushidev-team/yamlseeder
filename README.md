@@ -47,7 +47,11 @@ data:
 The model will define which data should be seeded.
 
 **primaryKey**:
-Default it is 'id' if not defined .
+Default it is 'id' if not defined.
+
+**exlude**:
+Default is false.
+This defines if the file will be included within the normal db:seed process.
 
 **fieldsOnCreate**:
 List of field name which defines which files will be need on a create statement. Make your fields nullable if you want to reduce the list.
@@ -55,6 +59,14 @@ List of field name which defines which files will be need on a create statement.
 **data**:
 Array of the actual data.
 Follow the structure of you model.
+
+### Command
+
+```bash
+ php artisan make:seeder-yaml demo --model=App/User
+```
+
+This command will create in the *database/seeds-yaml* folder a demo.yml file.
 
 ## Feedback
 

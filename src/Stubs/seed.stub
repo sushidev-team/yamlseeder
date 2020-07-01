@@ -1,0 +1,7 @@
+model: 'DummyModel'
+exclude: false
+primaryKey: id
+fieldsOnCreate:
+  - id
+data:
+  - id: 0

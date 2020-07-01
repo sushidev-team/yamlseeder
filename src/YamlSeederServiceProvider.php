@@ -48,6 +48,11 @@ class YamlSeederServiceProvider extends ServiceProvider
         // Commands
 
         if ($this->app->runningInConsole()) {
+
+            $this->commands([
+                \AMBERSIVE\YamlSeeder\Console\Commands\Dev\MakeYamlSeeder::class,
+            ]);
+
             if ($this->isConsoleCommandContains([ 'db:seed', '--seed' ], [ '--class', 'help', '-h' ])) {
                 $this->addSeedsAfterConsoleCommandFinished();
             }
