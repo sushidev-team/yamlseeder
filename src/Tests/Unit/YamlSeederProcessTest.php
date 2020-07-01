@@ -199,6 +199,46 @@ class YamlSeederProcessTest extends TestCase
         $this->assertTrue($result);
 
     }
+
+    /**
+     * Test if the convert data will transform the to a valid output format
+     */
+    public function testIfYamlSeederProcessConvertDataWillReturnTheDataCorrectly():void {
+
+        $item = [
+            'id' => 1000,
+            'migration_raw' => [
+                'field'      => 'migration',
+                'convertTo'  => 'password',
+                'value'      => 'asdfasdf'
+            ]
+        ];
+        
+        $result = $this->invokeMethod($this->process, 'convertData', [$item]);
+
+        $this->assertEquals(3, collect($result)->count());
+        $this->assertTrue(isset($result['migration']));
+        $this->assertNotEquals(data_get($item, 'migration_raw.value'), $result['migration']);
+
+    }
+
+    public function testIfYamlSeederProcessWillModifyTheYamlIfAConvertionHappend():void {
+
+        $this->process->load();
+        
+        $yamlCurrent = $this->process->yamlData;
+        $yamlOri = $this->process->yamlOrginal;
+
+        $this->assertEquals($yamlCurrent, $yamlOri);
+        
+        $result = $this->invokeMethod($this->process, 'execute', []);
+
+        $yamlCurrent = $this->process->yamlData;
+        $yamlOri = $this->process->yamlOrginal;
+
+        $this->assertNotEquals($yamlCurrent, $yamlOri);
+
+    }
         
     /**
      * Make a private function callable
