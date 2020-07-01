@@ -2,12 +2,14 @@
 
 namespace AMBERSIVE\YamlSeeder\Classes;
 
-use File;
-use Yaml;
 use DB;
+use File;
 use Str;
+use Yaml;
 
 use AMBERSIVE\YamlSeeder\Classes\YamlSeederFieldType;
+
+use Illuminate\Validation\ValidationException;
 
 class YamlSeederProcess {
 
@@ -25,6 +27,17 @@ class YamlSeederProcess {
     }
     
     /**
+     * Load the yaml content into the process
+     *
+     * @return void
+     */
+    public function load() {
+        $this->yamlData    = Yaml::parseFile($this->path);
+        $this->yamlOrginal = Yaml::parseFile($this->path);
+        return $this;
+    }
+    
+    /**
      * Execute the seed process
      *
      * @return bool
@@ -35,8 +48,9 @@ class YamlSeederProcess {
             return false;
         }
 
-        $this->yamlData    = Yaml::parseFile($this->path);
-        $this->yamlOrginal = Yaml::parseFile($this->path);
+        if (empty($this->yamlData)){
+            $this->load();
+        }
         
         $modelInstance  = $this->extractModelInstance();
         $this->fillable = $modelInstance->getFillable();
