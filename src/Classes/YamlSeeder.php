@@ -43,7 +43,9 @@ class YamlSeeder {
     public static function seedFile(String $path): YamlSeederProcess {
 
         $seedProcess = new YamlSeederProcess($path);
-        $seedProcess->execute();
+        if ($seedProcess->load()->exclude() === false) {
+            $seedProcess->execute();
+        }
         return $seedProcess;
 
     }

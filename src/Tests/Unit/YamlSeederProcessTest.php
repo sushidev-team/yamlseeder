@@ -115,6 +115,90 @@ class YamlSeederProcessTest extends TestCase
 
     }
 
+    /**
+     * Test if the createItemData function will not remove the id
+     */
+    public function testIfYamlSeeerProcessCreateItemDataWillAlwaysContainTheId(): void {
+
+        // Prepare
+        $item = $this->invokeMethod($this->process, 'sanitizeItem', [[
+            'id' => 1000,
+            'monkey' => true
+        ]]);
+        
+        // Executed
+        $result = $this->invokeMethod($this->process, 'createItemData', [$item]);
+
+        $this->assertNotNull($result);
+        $this->assertFalse(isset($result['id']));
+        $this->assertFalse(isset($result['monkey']));
+
+    }
+
+    /**
+     * Test if createItemData will always return the required data for the create of the model data
+     */
+    public function testIfYamlSeederProcessCreateItemDataWillAddAllRequiredParameters(): void {
+
+        // Prepare
+        $this->process->load();
+
+        // Execute
+        $itemOri = $this->process->yamlData['data'][0];
+        $item = $this->invokeMethod($this->process, 'convertData', [$itemOri]);
+
+        $result = $this->invokeMethod($this->process, 'createItemData', [$item]);
+
+        // Assertions
+
+        $this->assertEquals(3, collect($result)->count());
+
+    }
+
+    public function testIfYamlSeederProcessCreateItemDataWillExtractTheInformationFromYamlAttribute():void {
+
+        // Prepare
+        $process = new YamlSeederProcess(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo2.yml'));
+        $process->load();    
+
+        // Execute
+        $itemOri = $process->yamlData['data'][0];
+        $item = $this->invokeMethod($process, 'convertData', [$itemOri]);
+
+        $result = $this->invokeMethod($process, 'createItemData', [$item]);
+
+
+
+        // Assertions
+
+        $this->assertEquals(1, collect($result)->count());
+
+
+    }
+
+    /**
+     * Test if the exclude option will be returned 
+     */
+    public function testIfYamlSeederProcessExcludeReturnsABooleanIfTheFileShouldNotRunInTheSeedingProcces():void {
+
+        $result = $this->process->exclude();
+        $this->assertFalse($result);
+
+    }
+
+    /**
+     * This test checks if a true value will be returned
+     */
+    public function testIfYamlSeederProcessWillReturnTheCorrectValueForTheExcludeOption():void {
+
+        // Prepare
+        $process = new YamlSeederProcess(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo2.yml'));
+        $result = $process->load()->exclude();
+        
+        // Assetions
+        $this->assertTrue($result);
+
+    }
         
     /**
      * Make a private function callable

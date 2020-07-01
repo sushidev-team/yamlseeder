@@ -61,6 +61,17 @@ class YamlSeederProcess {
     }
     
     /**
+     * Returns the value if this yaml should be excluded from the seeding process
+     *
+     * @return bool
+     */
+    public function exclude():bool {
+        $exclude = data_get($this->yamlData, 'exclude', false);
+        $exclude = $exclude === null ? false : $exclude;
+        return $exclude;
+    }
+    
+    /**
      * Extract a model Instance and check if the model exists
      *
      * @return void
@@ -147,7 +158,8 @@ class YamlSeederProcess {
 
         $primaryKey     = data_get($this->yamlData, 'primary', 'id');
         $fieldsOnCreate = data_get($this->yamlData, 'fieldsOnCreate', []);
-        $returnData     = [];
+        $fieldsOnCreate = $fieldsOnCreate == null ? [] : $fieldsOnCreate;
+        $returnData     = [];       
 
         foreach($fieldsOnCreate as $index => $value) {
 
