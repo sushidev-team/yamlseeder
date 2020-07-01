@@ -20,7 +20,12 @@ class YamlSeederFieldType {
         }
         $this->value = $attributes['value'];
     }
-
+    
+    /**
+     * Transform yaml data
+     *
+     * @return void
+     */
     public function transform() {
 
         switch($this->convertTo){

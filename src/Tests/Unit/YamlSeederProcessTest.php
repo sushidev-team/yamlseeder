@@ -48,16 +48,71 @@ class YamlSeederProcessTest extends TestCase
      */
     public function testIfYamlSeederProcessCanExtractModel():void {
 
-        //$this->expectException(\Illuminate\Validation\ValidationException::class);
         $this->process->load();
         $modelInstance = $this->invokeMethod($this->process, 'extractModelInstance');
         $this->assertNotNull($modelInstance);
 
     }
 
+    /**
+     * Test if the process throws a ValidationException when the data was not loaded
+     */
     public function testIfYamlSeederProcessThrowExeptionIfYamlNotLoaded():void {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
         $modelInstance = $this->invokeMethod($this->process, 'extractModelInstance');
+    }
+
+    /**
+     * Test if the process will sanitize the item by using the fillable model
+     */
+    public function testIfYamlSeederProcessSanitizItem():void {
+
+        $this->process->load();
+
+        $result = $this->invokeMethod($this->process, 'sanitizeItem', [[
+            'id' => 1000,
+            'monkey' => true
+        ]]);
+
+        $this->assertNotNull($result);
+        $this->assertTrue(isset($result['id']));
+        $this->assertFalse(isset($result['monkey']));
+
+    }
+
+    /**
+     * Test if the sanitize function requires the yaml to be loaded
+     */
+    public function testIfYamlSeederProcessSanitizeItemWillReturnEmptyIfLoadWasNotExecuted():void {
+
+        $result = $this->invokeMethod($this->process, 'sanitizeItem', [[
+            'id' => 1000,
+            'monkey' => true
+        ]]);
+
+        $this->assertNotNull($result);
+        $this->assertFalse(isset($result['id']));
+        $this->assertFalse(isset($result['monkey']));
+
+    }
+
+    /**
+     * Test if a single entry will be savedd
+     */
+    public function testIfYamlSeederProccessSaveItemWillUpdateTheYamlData():void {
+
+        // Prepare
+        $this->process->load();
+
+        // Execute
+        $itemOri = $this->process->yamlData['data'][0];
+        
+        $result = $this->invokeMethod($this->process, 'saveItem', [$itemOri,0]);
+
+        // Assertions
+        $this->assertNotNull($itemOri);
+        $this->assertTrue($result);
+
     }
 
         
@@ -73,7 +128,6 @@ class YamlSeederProcessTest extends TestCase
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
-
         return $method->invokeArgs($object, $parameters);
     }
 

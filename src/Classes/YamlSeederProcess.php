@@ -34,6 +34,10 @@ class YamlSeederProcess {
     public function load() {
         $this->yamlData    = Yaml::parseFile($this->path);
         $this->yamlOrginal = Yaml::parseFile($this->path);
+
+        $modelInstance  = $this->extractModelInstance();
+        $this->fillable = $modelInstance->getFillable();
+        $this->intance  = $modelInstance;
         return $this;
     }
     
@@ -51,10 +55,6 @@ class YamlSeederProcess {
         if (empty($this->yamlData)){
             $this->load();
         }
-        
-        $modelInstance  = $this->extractModelInstance();
-        $this->fillable = $modelInstance->getFillable();
-        $this->intance  = $modelInstance;
 
         return $this->loopLines();
 
@@ -127,6 +127,7 @@ class YamlSeederProcess {
         }
 
         $entry         = $model::firstOrCreate($this->createItemData($itemSanitized));
+
         $itemSanitized = $this->createItemData($itemSanitized);
         $entry->update($itemSanitized);
 
