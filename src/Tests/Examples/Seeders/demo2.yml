@@ -1,0 +1,8 @@
+model: \AMBERSIVE\YamlSeeder\Tests\Examples\Models\Migration
+exclude: true
+primaryKey: id
+fieldsOnCreate:
+data:
+  - id: 102
+    batch: 1
+    migration: 'users_test_table'
