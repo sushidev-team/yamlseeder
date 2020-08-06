@@ -5,7 +5,7 @@ namespace AMBERSIVE\YamlSeeder\Tests\Unit\Classes;
 
 use Config;
 use File;
-use Tests\TestCase;
+use AMBERSIVE\Tests\TestCase;
 
 use AMBERSIVE\YamlSeeder\Classes\YamlSeederProcess;
 
@@ -26,10 +26,10 @@ class YamlSeederProcessTest extends TestCase
     {
         parent::setUp();
 
-        Config::set('yaml-seeder.path', base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders'));
-        File::copy(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'), base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.ori'));
+        Config::set('yaml-seeder.path', __DIR__.'/../Examples/Seeders');
+        File::copy(__DIR__.'/../Examples/Seeders/demo.yml', __DIR__.'/../Examples/Seeders/demo.ori');
 
-        $this->process = new YamlSeederProcess(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'));
+        $this->process = new YamlSeederProcess(__DIR__.'/../Examples/Seeders/demo.yml');
 
     }
 
@@ -38,8 +38,8 @@ class YamlSeederProcessTest extends TestCase
         parent::tearDown();
 
         // Reset the demo file
-        File::delete(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'));
-        File::move(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.ori'), base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'));
+        File::delete(__DIR__.'/../Examples/Seeders/demo.yml');
+        File::move(__DIR__.'/../Examples/Seeders/demo.ori', __DIR__.'/../Examples/Seeders/demo.yml');
 
     }
     
@@ -158,7 +158,7 @@ class YamlSeederProcessTest extends TestCase
     public function testIfYamlSeederProcessCreateItemDataWillExtractTheInformationFromYamlAttribute():void {
 
         // Prepare
-        $process = new YamlSeederProcess(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo2.yml'));
+        $process = new YamlSeederProcess(__DIR__.'/../Examples/Seeders/demo2.yml');
         $process->load();    
 
         // Execute
@@ -192,7 +192,7 @@ class YamlSeederProcessTest extends TestCase
     public function testIfYamlSeederProcessWillReturnTheCorrectValueForTheExcludeOption():void {
 
         // Prepare
-        $process = new YamlSeederProcess(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo2.yml'));
+        $process = new YamlSeederProcess(__DIR__.'/../Examples/Seeders/demo2.yml');
         $result = $process->load()->exclude();
         
         // Assetions

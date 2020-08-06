@@ -5,7 +5,7 @@ namespace AMBERSIVE\YamlSeeder\Tests\Unit\Classes;
 
 use Config;
 use File;
-use Tests\TestCase;
+use AMBERSIVE\Tests\TestCase;
 
 use AMBERSIVE\YamlSeeder\Classes\YamlSeeder;
 
@@ -25,13 +25,13 @@ class YamlSeederTest extends TestCase
     {
         parent::setUp();
 
-        Config::set('yaml-seeder.path', base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders'));
+        Config::set('yaml-seeder.path', __DIR__.'/../Examples/Seeders');
 
-        \AMBERSIVE\YamlSeeder\Tests\Examples\Models\Migration::all()->each(function($item){
+        \AMBERSIVE\Tests\Examples\Models\Migration::all()->each(function($item){
             $item->delete();
         });
 
-        File::copy(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'), base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.ori'));
+        File::copy(__DIR__.'/../Examples/Seeders/demo.yml', __DIR__.'/../Examples/Seeders/demo.ori');
 
     }
 
@@ -40,8 +40,8 @@ class YamlSeederTest extends TestCase
         parent::tearDown();
 
         // Reset the demo file
-        File::delete(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'));
-        File::move(base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.ori'), base_path('vendor/ambersive/yamlseeder/src/Tests/Examples/Seeders/demo.yml'));
+        File::delete(__DIR__.'/../Examples/Seeders/demo.yml');
+        File::move(__DIR__.'/../Examples/Seeders/demo.ori', __DIR__.'/../Examples/Seeders/demo.yml');
 
     }
     
@@ -52,7 +52,7 @@ class YamlSeederTest extends TestCase
 
         $result = YamlSeeder::seed();
 
-        $entries = \AMBERSIVE\YamlSeeder\Tests\Examples\Models\Migration::get();
+        $entries = \AMBERSIVE\Tests\Examples\Models\Migration::get();
         $element = $entries->first();
 
         $this->assertEquals(2, $entries->count());

@@ -32,7 +32,7 @@ Please use the *.yml* file extension.
 The structure of the the seed looks like:
 
 ```yml
-model: \AMBERSIVE\YamlSeeder\Tests\Examples\Models\Migration
+model: \AMBERSIVE\Tests\Examples\Models\Migration
 primaryKey: id
 fieldsOnCreate:
   - migration

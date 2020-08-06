@@ -4,8 +4,8 @@ namespace AMBERSIVE\YamlSeeder\Classes;
 
 use DB;
 use File;
-use Str;
 use Yaml;
+use Str;
 
 use AMBERSIVE\YamlSeeder\Classes\YamlSeederFieldType;
 

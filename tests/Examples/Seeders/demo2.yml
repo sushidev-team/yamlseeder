@@ -1,4 +1,4 @@
-model: \AMBERSIVE\YamlSeeder\Tests\Examples\Models\Migration
+model: \AMBERSIVE\Tests\Examples\Models\Migration
 exclude: true
 primaryKey: id
 fieldsOnCreate:

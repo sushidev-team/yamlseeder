@@ -1,6 +1,6 @@
 <?php
 
-namespace AMBERSIVE\YamlSeeder\Tests\Examples\Models;
+namespace AMBERSIVE\Tests\Examples\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
