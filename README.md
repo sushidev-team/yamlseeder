@@ -1,6 +1,6 @@
 # YAML SEEDER
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/a6068ea69ed31f0e6827/maintainability)](https://codeclimate.com/github/AMBERSIVE/yamlseeder/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a6068ea69ed31f0e6827/maintainability)](https://codeclimate.com/github/AMBERSIVE/yamlseeder/maintainability) [![Build Status](https://travis-ci.org/AMBERSIVE/yamlseeder.svg?branch=master)](https://travis-ci.org/AMBERSIVE/yamlseeder)
 
 Changes between versions will be tracked in the [CHANGELOG](CHANGELOG.md).
 
