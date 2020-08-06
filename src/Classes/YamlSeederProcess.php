@@ -104,7 +104,7 @@ class YamlSeederProcess {
             $lines->each(function($line, $index){
                 $successful = $this->saveItem($line, $index);
                 if ($successful == false) {
-                    throw \Exeception("Seed failed!");
+                    throw \Exception("Seed failed!");
                 }
             });
 
