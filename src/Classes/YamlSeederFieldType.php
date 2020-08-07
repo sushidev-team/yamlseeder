@@ -3,7 +3,7 @@
 namespace AMBERSIVE\YamlSeeder\Classes;
 
 use File;
-use Yaml;
+use Symfony\Component\Yaml\Yaml;
 use DB;
 
 class YamlSeederFieldType {

@@ -4,7 +4,7 @@ namespace AMBERSIVE\YamlSeeder\Classes;
 
 use DB;
 use File;
-use Yaml;
+use Symfony\Component\Yaml\Yaml;
 use Str;
 
 use AMBERSIVE\YamlSeeder\Classes\YamlSeederFieldType;
