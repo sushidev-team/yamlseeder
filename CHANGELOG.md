@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2020-09-14
+### Added
+- Add pre seed support
+
 ## [0.1.3] - 2020-09-14
 ### Fixed
 - Create entries with all constraints

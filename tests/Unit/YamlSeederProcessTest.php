@@ -201,6 +201,21 @@ class YamlSeederProcessTest extends TestCase
     }
 
     /**
+     * This test checks if a true value will be returned
+     */
+    public function testIfYamlSeederProcessWillHandlePreSeedFiles():void {
+
+
+        // Prepare
+        $process = new YamlSeederProcess(__DIR__.'/../Examples/Seeders/demo3.yml');
+        $result = $process->load()->runAsPre();
+        
+        // Assetions
+        $this->assertTrue($result);
+
+    }
+
+    /**
      * Test if the convert data will transform the to a valid output format
      */
     public function testIfYamlSeederProcessConvertDataWillReturnTheDataCorrectly():void {

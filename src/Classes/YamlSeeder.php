@@ -13,12 +13,16 @@ class YamlSeeder {
      *
      * @return array
      */
-    public static function seed(): array {
+    public static function seed(bool $runAsPreCommand = false): array {
 
         $path = config('yaml-seeder.path', base_path('database/seeds-yaml'));
 
         if (File::exists($path) === false) {
             return [];
+        }
+
+        if ($runAsPreCommand){
+            dd('asd');
         }
 
         $finder    = new \Symfony\Component\Finder\Finder();
@@ -27,7 +31,7 @@ class YamlSeeder {
         $results = [];
 
         foreach ($finder as $file) {
-            $results[] = self::seedFile($file);
+            $results[] = self::seedFile($file, $runAsPreCommand);
         }
 
         return $results;
@@ -40,10 +44,14 @@ class YamlSeeder {
      * @param  mixed $path
      * @return YamlSeederProcess
      */
-    public static function seedFile(String $path): YamlSeederProcess {
+    public static function seedFile(String $path, bool $runAsPreCommand = false): YamlSeederProcess {
 
         $seedProcess = new YamlSeederProcess($path);
-        if ($seedProcess->load()->exclude() === false) {
+
+        if ($runAsPreCommand && $seedProcess->load()->runAsPre() === true && $seedProcess->load()->exclude() === false) {
+            $seedProcess->execute();
+        }
+        else if ($seedProcess->load()->runAsPre() === false && $seedProcess->load()->exclude() === false) {
             $seedProcess->execute();
         }
         return $seedProcess;

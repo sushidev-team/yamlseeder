@@ -1,5 +1,6 @@
 model: 'DummyModel'
 exclude: false
+pre: false
 primaryKey: id
 fieldsOnCreate:
   - id

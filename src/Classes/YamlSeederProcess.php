@@ -59,6 +59,17 @@ class YamlSeederProcess {
         return $this->loopLines();
 
     }
+
+    /**
+     * Returns it the yaml should be run before normal database seeding
+     *
+     * @return bool
+     */
+    public function runAsPre():bool {
+        $preSeed = data_get($this->yamlData, 'pre', false);
+        $preSeed = $preSeed === null ? false : $preSeed;
+        return $preSeed;
+    }
     
     /**
      * Returns the value if this yaml should be excluded from the seeding process

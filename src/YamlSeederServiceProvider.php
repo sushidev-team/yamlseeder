@@ -53,6 +53,10 @@ class YamlSeederServiceProvider extends ServiceProvider
                 \AMBERSIVE\YamlSeeder\Console\Commands\Dev\MakeYamlSeeder::class,
             ]);
 
+            if ($this->isConsoleCommandContains([ 'db:seed', '--seed' ])){
+                YamlSeeder::seed(true);
+            }
+
             if ($this->isConsoleCommandContains([ 'db:seed', '--seed' ], [ '--class', 'help', '-h' ])) {
                 $this->addSeedsAfterConsoleCommandFinished();
             }
@@ -68,6 +72,9 @@ class YamlSeederServiceProvider extends ServiceProvider
     private function addSeedsAfterConsoleCommandFinished():void {
 
         Event::listen(CommandFinished::class, function(CommandFinished $event) {
+            if ($event->command !== 'db:seed'){
+                return;
+            }
             YamlSeeder::seed();
         });
 
