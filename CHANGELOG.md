@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2020-09-14
+### Fixed
+- Create entries with all constraints
+
 ## [0.1.2] - 2020-09-09
 ### Added
 - Added support for Laravel 8
