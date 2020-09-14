@@ -216,7 +216,7 @@ class YamlSeederProcessTest extends TestCase
         
         $result = $this->invokeMethod($this->process, 'convertData', [$item]);
 
-        $this->assertEquals(3, collect($result)->count());
+        $this->assertEquals(2, collect($result)->count());
         $this->assertTrue(isset($result['migration']));
         $this->assertNotEquals(data_get($item, 'migration_raw.value'), $result['migration']);
 

@@ -36,7 +36,7 @@ class YamlSeederProcess {
         $this->yamlOrginal = Yaml::parseFile($this->path);
 
         $modelInstance  = $this->extractModelInstance();
-        $this->fillable = $modelInstance->getFillable();
+        $this->fillable = array_unique(array_merge(['id'], $modelInstance->getFillable()));
         $this->intance  = $modelInstance;
         return $this;
     }
@@ -137,10 +137,15 @@ class YamlSeederProcess {
             return false;
         }
 
-        $entry         = $model::firstOrCreate($this->createItemData($itemSanitized));
-
+        $entry = $model::where($primaryKey, data_get($item, $primaryKey, -1))->first();
         $itemSanitized = $this->createItemData($itemSanitized);
-        $entry->update($itemSanitized);
+
+        if ($entry === null) {
+            $model::create($itemSanitized);
+        }
+        else {
+            $entry->update($itemSanitized);
+        }
 
         $this->yamlData['data'][$index] = $itemSanitized;
 
@@ -191,6 +196,7 @@ class YamlSeederProcess {
                 $field = $type->field !== "" ? $type->field : $key;
                 $item[$field] = $type->transform();
                 $this->saveOnFinish = true;
+                unset($item[$key]);
             }
         }
 
@@ -206,7 +212,7 @@ class YamlSeederProcess {
      */
     private function sanitizeItem(array $item):array {
         foreach($item as $key => $value){
-            if (Str::endsWith($key, '_raw') === false && in_array($key, $this->fillable) === false) {
+            if (Str::endsWith($key, '_raw') === false && (in_array($key, $this->fillable) === false)) {
                 unset($item[$key]);
             }
         }
