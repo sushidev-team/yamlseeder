@@ -21,10 +21,6 @@ class YamlSeeder {
             return [];
         }
 
-        if ($runAsPreCommand){
-            dd('asd');
-        }
-
         $finder    = new \Symfony\Component\Finder\Finder();
         $finder->files()->name("*.yml")->in($path);
 
